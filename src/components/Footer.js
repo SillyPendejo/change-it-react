@@ -2,6 +2,10 @@ import React from "react";
 import '../css/Footer.css'
 
 function Footer() {
+    const linkNames = [ "Divorce", "Privacy", "Deed Poll Online", "Terms", "FAQ"];
+    const linkList = linkNames.map( (name) =>
+        <li className="footer__link"><a className="footer__link_real" href="#">{name}</a></li>)
+
     return (
     <footer className="footer block_pink">
         <div className="footer__newsletter">
@@ -11,11 +15,7 @@ function Footer() {
         <div className="footer__bottom">
             <div className="footer__copyright">© 2022 Change.it Ltd. All Rights Reserved</div>
             <ul className="footer__link-list">
-                <li className="footer__link"><a className="footer__link_real" href="#">Divorce</a></li>
-                <li className="footer__link"><a className="footer__link_real" href="#">Privacy</a></li>
-                <li className="footer__link"><a className="footer__link_real" href="#">Deed Poll Online</a></li>
-                <li className="footer__link"><a className="footer__link_real" href="#">Terms</a></li>
-                <li className="footer__link"><a className="footer__link_real" href="#">FAQ</a></li>
+                {linkList}
             </ul>
         </div>
     </footer>
