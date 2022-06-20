@@ -2,6 +2,12 @@ import React from "react";
 import '../css/Header.css'
 
 function Header() {
+    const linkNames = [ "Overview", "How it works", "Reviews", "Blog", "Checklist"];
+    const linkList = linkNames.map( (name) => 
+        <li className="header__nav-item">
+            <a className="header__nav-link" href={'#' + (name === "How it works" ? "faq" : name).toLowerCase()}>{name}</a>
+        </li>)
+
     return (
         <header className="header">
             <div className="header__top">
@@ -9,11 +15,7 @@ function Header() {
                 <div className="header__nav">
                     <div className="nav-button">Navigation</div>
                     <ul className="header__nav-list">
-                        <li className="header__nav-item"><a className="header__nav-link" href="#overview">Overview</a></li>
-                        <li className="header__nav-item"><a className="header__nav-link" href="#faq">How it works</a></li>
-                        <li className="header__nav-item"><a className="header__nav-link" href="#reviews">Reviews</a></li>
-                        <li className="header__nav-item"><a className="header__nav-link" href="#blog">Blog</a></li>
-                        <li className="header__nav-item"><a className="header__nav-link" href="#checklist">Checklist</a></li>
+                        {linkList}
                     </ul>
                 </div>
             </div>
