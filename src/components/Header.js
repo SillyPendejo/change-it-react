@@ -4,7 +4,7 @@ import '../css/Header.css'
 function Header() {
     const linkNames = [ "Overview", "How it works", "Reviews", "Blog", "Checklist"];
     const linkList = linkNames.map( (name) => 
-        <li className="header__nav-item">
+        <li className="header__nav-item" key={(name === "How it works" ? "faq" : name).toLowerCase()}>
             <a className="header__nav-link" href={'#' + (name === "How it works" ? "faq" : name).toLowerCase()}>{name}</a>
         </li>)
 
