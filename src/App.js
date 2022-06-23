@@ -6,7 +6,7 @@ import Slogan from './components/Slogan';
 import Faq from './components/Faq';
 import Reviews from './components/Reviews'
 import Blog from './components/Blog/Blog'
-import Checklist from './components/Checklist';
+import Checklist from './components/Checklist/Checklist';
 import Footer from './components/Footer'
 
 function App() {

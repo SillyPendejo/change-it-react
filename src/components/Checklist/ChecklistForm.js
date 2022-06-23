@@ -1,6 +1,21 @@
 import React, { useState, useEffect } from "react";
 
 function ChecklistForm() {
+  const [inputValues, setInputValues] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    event: "",
+    date: "",
+  });
+  const [errorValues, setErrorValues] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    event: "",
+    date: "",
+  });
+
   function isValidText(inputText, pattern) {
     if (inputText === "") return true;
     return pattern.test(inputText);
@@ -28,72 +43,70 @@ function ChecklistForm() {
     }
   }
 
-  const [errorList, setErrorList] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    event: "",
-    date: "",
-  });
-
-  const [firstName, setFirstName] = useState("");
   const handleChangeFistName = ({ target }) => {
-    setFirstName(target.value);
+    setInputValues((prevInputs) => ({ ...prevInputs, firstName: target.value }));
   };
   const handleFocusFirstName = () => {
-    setErrorList((prevList) => ({ ...prevList, firstName: "" }));
+    setErrorValues((prevList) => ({ ...prevList, firstName: "" }));
   };
-  useEffect(() => {
-    if (!isValidText(firstName, /^[A-Z][a-z]+$/)) {
-      setErrorList((prevList) => ({
+  const validateFirstName = () => {
+    if (!isValidText(inputValues.firstName, /^[A-Z][a-z]+$/)) {
+      setErrorValues((prevList) => ({
         ...prevList,
-        firstName: nameErrorText(firstName, "name"),
+        firstName: nameErrorText(inputValues.firstName, "name"),
       }));
     } else {
-      setErrorList((prevList) => ({ ...prevList, firstName: "" }));
+      setErrorValues((prevList) => ({ ...prevList, firstName: "" }));
     }
-  }, [firstName]);
+  }
+  useEffect(() => {
+    validateFirstName();
+  }, [inputValues.firstName]);
 
-  const [lastName, setLastName] = useState("");
   const handleChangeLastName = ({ target }) => {
-    setLastName(target.value);
+    setInputValues((prevInputs) => ({ ...prevInputs, lastName: target.value}));
   };
   const handleFocusLastName = () => {
-    setErrorList((prevList) => ({ ...prevList, lastName: "" }));
+    setErrorValues((prevList) => ({ ...prevList, lastName: "" }));
   };
-  useEffect(() => {
-    if (!isValidText(lastName, /^[A-Z][a-z]+$/)) {
-      setErrorList((prevList) => ({
+  const validateLastName = () => {
+    if (!isValidText(inputValues.lastName, /^[A-Z][a-z]+$/)) {
+      setErrorValues((prevList) => ({
         ...prevList,
-        lastName: nameErrorText(lastName, "name"),
+        lastName: nameErrorText(inputValues.lastName, "name"),
       }));
     } else {
-      setErrorList((prevList) => ({ ...prevList, lastName: "" }));
+      setErrorValues((prevList) => ({ ...prevList, lastName: "" }));
     }
-  }, [lastName]);
+  }
+  useEffect(() => {
+    validateLastName();
+  }, [inputValues.lastName]);
 
-  const [email, setEmail] = useState("");
   const handleChangeEmail = ({ target }) => {
-    setEmail(target.value);
+    setInputValues( (prevInputs) => ({ ...prevInputs, email: target.value}))
   };
   const handleFocusEmail = () => {
-    setErrorList((prevList) => ({ ...prevList, email: "" }));
+    setErrorValues((prevList) => ({ ...prevList, email: "" }));
   };
-  useEffect(() => {
+  const validateEmail = () => {
     if (
       !isValidText(
-        email,
+        inputValues.email,
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       )
     ) {
-      setErrorList((prevList) => ({
+      setErrorValues((prevList) => ({
         ...prevList,
         email: "Enter a valid email address",
       }));
     } else {
-      setErrorList((prevList) => ({ ...prevList, email: "" }));
+      setErrorValues((prevList) => ({ ...prevList, email: "" }));
     }
-  }, [email]);
+  }
+  useEffect(() => {
+    validateEmail();
+  }, [inputValues.email]);
 
   const options = [
     "Marriage",
@@ -106,12 +119,11 @@ function ChecklistForm() {
       {option}
     </option>
   ));
-  const [event, setEvent] = useState("");
   const handleChangeEvent = ({ target }) => {
-    setEvent(target.value);
+    setInputValues((prevInputs) => ({ ...prevInputs, event: target.value}))
   };
-  const handleFocusEvent = ({ target }) => {
-    setErrorList((prevList) => ({
+  const handleFocusEvent = () => {
+    setErrorValues((prevList) => ({
       ...prevList,
       event: "",
     }));
@@ -125,47 +137,53 @@ function ChecklistForm() {
     const inputDateNumber = Date.parse(inputDate);
     return inputDateNumber < now;
   }
-  const [date, setDate] = useState("");
   const handleChangeDate = ({ target }) => {
-    setDate(target.value);
+    setInputValues( (prevInputs) => ({ ...prevInputs, date: target.value}))
   };
-  useEffect(() => {
-    if (!isValidDate(date)) {
-      setErrorList((prevList) => ({
+  const validateDate = () => {
+    if (!isValidDate(inputValues.date)) {
+      setErrorValues((prevList) => ({
         ...prevList,
         date: "Date can't be later than today",
       }));
     } else {
-      setErrorList((prevList) => ({ ...prevList, date: "" }));
+      setErrorValues((prevList) => ({ ...prevList, date: "" }));
     }
-  }, [date]);
+  }
+  useEffect(() => {
+    validateDate();
+  }, [inputValues.date]);
 
   const handleSubmit = (e) => {
-    const stateList = [firstName, lastName, email, event, date];
-    const stateNames = Object.keys(errorList);
+    const stateValues = [ inputValues.firstName, inputValues.lastName, inputValues.email, inputValues.event, inputValues.date];
+    const stateNames = Object.keys(inputValues);
 
     e.preventDefault();
 
-    let isInputEmpty = false;
-    stateList.forEach((inputState, index) => {
+    validateFirstName();
+    validateLastName();
+    validateEmail();
+    validateDate();
+
+    let isFormFilled = true;
+    stateValues.forEach((inputState, index) => {
       if (inputState === "") {
-        isInputEmpty = true;
-        setErrorList((prevList) => ({
+        isFormFilled = false;
+        setErrorValues((prevList) => ({
           ...prevList,
           [stateNames[index]]: "Required field",
         }));
       }
     });
-
-    if (isInputEmpty) return;
+    if (!isFormFilled) return;
 
     let isFormValid = true;
-    Object.values(errorList).forEach((inputErrorText) => {
-      if (inputErrorText !== "") isFormValid = false;
+    Object.values(errorValues).forEach((errorValue) => {
+      if (errorValue !== "") isFormValid = false;
     });
     if (!isFormValid) return;
 
-    stateList.forEach((inputState, index) =>
+    stateValues.forEach((inputState, index) =>
       console.log(`${stateNames[index]}: ${inputState}`)
     );
   };
@@ -177,67 +195,67 @@ function ChecklistForm() {
       </label>
       <input
         className={
-          errorList.firstName === ""
+          errorValues.firstName === ""
             ? "checklist__input"
             : "checklist__input checklist__error"
         }
         onChange={handleChangeFistName}
         onFocus={handleFocusFirstName}
-        value={firstName}
+        value={inputValues.firstName}
         type="text"
         name="name"
         id="name"
         placeholder="Enter Your First Name"
       />
-      {errorList.firstName !== "" && (
-        <div className="checklist__error_msg">{errorList.firstName}</div>
+      {errorValues.firstName !== "" && (
+        <div className="checklist__error_msg">{errorValues.firstName}</div>
       )}
       <label className="checklist__label" htmlFor="lastname">
         Last Name
       </label>
       <input
         className={
-          errorList.lastName === ""
+          errorValues.lastName === ""
             ? "checklist__input"
             : "checklist__input checklist__error"
         }
         onChange={handleChangeLastName}
         onFocus={handleFocusLastName}
-        value={lastName}
+        value={inputValues.lastName}
         type="text"
         name="lastname"
         id="lastname"
         placeholder="Enter Your Last Name"
       />
-      {errorList.lastName !== "" && (
-        <div className="checklist__error_msg">{errorList.lastName}</div>
+      {errorValues.lastName !== "" && (
+        <div className="checklist__error_msg">{errorValues.lastName}</div>
       )}
       <label className="checklist__label" htmlFor="email">
         Email
       </label>
       <input
         className={
-          errorList.email === ""
+          errorValues.email === ""
             ? "checklist__input"
             : "checklist__input checklist__error"
         }
         onChange={handleChangeEmail}
         onFocus={handleFocusEmail}
-        value={email}
+        value={inputValues.email}
         type="text"
         name="email"
         id="email"
         placeholder="Enter Your Email"
       />
-      {errorList.email !== "" && (
-        <div className="checklist__error_msg">{errorList.email}</div>
+      {errorValues.email !== "" && (
+        <div className="checklist__error_msg">{errorValues.email}</div>
       )}
       <label className="checklist__label" htmlFor="event">
         Life Event
       </label>
       <select
         className={
-          errorList.event === ""
+          errorValues.event === ""
             ? "checklist__select"
             : "checklist__select checklist__error"
         }
@@ -250,26 +268,26 @@ function ChecklistForm() {
         <option disabled={true}>Select Life Event</option>
         {eventOptions}
       </select>
-      {errorList.event !== "" && (
-        <div className="checklist__error_msg">{errorList.event}</div>
+      {errorValues.event !== "" && (
+        <div className="checklist__error_msg">{errorValues.event}</div>
       )}
       <label className="checklist__label" htmlFor="date">
         Life Event Date
       </label>
       <input
         className={
-          errorList.date === ""
+          errorValues.date === ""
             ? "checklist__input"
             : "checklist__input checklist__error"
         }
         onChange={handleChangeDate}
-        value={date}
+        value={inputValues.date}
         type="date"
         name="date"
         id="date"
       />
-      {errorList.date !== "" && (
-        <div className="checklist__error_msg">{errorList.date}</div>
+      {errorValues.date !== "" && (
+        <div className="checklist__error_msg">{errorValues.date}</div>
       )}
       <span className="checklist__policy">
         By submitting your details you agree with our{" "}

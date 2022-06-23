@@ -1,6 +1,6 @@
 import React from "react";
 import ChecklistForm from "./ChecklistForm";
-import "../css/Checklist.css";
+import "../../css/Checklist.css";
 
 function Checklist() {
   return (
