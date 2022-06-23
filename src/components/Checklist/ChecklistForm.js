@@ -44,7 +44,10 @@ function ChecklistForm() {
   }
 
   const handleChangeFistName = ({ target }) => {
-    setInputValues((prevInputs) => ({ ...prevInputs, firstName: target.value }));
+    setInputValues((prevInputs) => ({
+      ...prevInputs,
+      firstName: target.value,
+    }));
   };
   const handleFocusFirstName = () => {
     setErrorValues((prevList) => ({ ...prevList, firstName: "" }));
@@ -58,13 +61,13 @@ function ChecklistForm() {
     } else {
       setErrorValues((prevList) => ({ ...prevList, firstName: "" }));
     }
-  }
+  };
   useEffect(() => {
     validateFirstName();
   }, [inputValues.firstName]);
 
   const handleChangeLastName = ({ target }) => {
-    setInputValues((prevInputs) => ({ ...prevInputs, lastName: target.value}));
+    setInputValues((prevInputs) => ({ ...prevInputs, lastName: target.value }));
   };
   const handleFocusLastName = () => {
     setErrorValues((prevList) => ({ ...prevList, lastName: "" }));
@@ -78,13 +81,13 @@ function ChecklistForm() {
     } else {
       setErrorValues((prevList) => ({ ...prevList, lastName: "" }));
     }
-  }
+  };
   useEffect(() => {
     validateLastName();
   }, [inputValues.lastName]);
 
   const handleChangeEmail = ({ target }) => {
-    setInputValues( (prevInputs) => ({ ...prevInputs, email: target.value}))
+    setInputValues((prevInputs) => ({ ...prevInputs, email: target.value }));
   };
   const handleFocusEmail = () => {
     setErrorValues((prevList) => ({ ...prevList, email: "" }));
@@ -103,7 +106,7 @@ function ChecklistForm() {
     } else {
       setErrorValues((prevList) => ({ ...prevList, email: "" }));
     }
-  }
+  };
   useEffect(() => {
     validateEmail();
   }, [inputValues.email]);
@@ -120,7 +123,7 @@ function ChecklistForm() {
     </option>
   ));
   const handleChangeEvent = ({ target }) => {
-    setInputValues((prevInputs) => ({ ...prevInputs, event: target.value}))
+    setInputValues((prevInputs) => ({ ...prevInputs, event: target.value }));
   };
   const handleFocusEvent = () => {
     setErrorValues((prevList) => ({
@@ -138,7 +141,7 @@ function ChecklistForm() {
     return inputDateNumber < now;
   }
   const handleChangeDate = ({ target }) => {
-    setInputValues( (prevInputs) => ({ ...prevInputs, date: target.value}))
+    setInputValues((prevInputs) => ({ ...prevInputs, date: target.value }));
   };
   const validateDate = () => {
     if (!isValidDate(inputValues.date)) {
@@ -149,13 +152,19 @@ function ChecklistForm() {
     } else {
       setErrorValues((prevList) => ({ ...prevList, date: "" }));
     }
-  }
+  };
   useEffect(() => {
     validateDate();
   }, [inputValues.date]);
 
   const handleSubmit = (e) => {
-    const stateValues = [ inputValues.firstName, inputValues.lastName, inputValues.email, inputValues.event, inputValues.date];
+    const stateValues = [
+      inputValues.firstName,
+      inputValues.lastName,
+      inputValues.email,
+      inputValues.event,
+      inputValues.date,
+    ];
     const stateNames = Object.keys(inputValues);
 
     e.preventDefault();
