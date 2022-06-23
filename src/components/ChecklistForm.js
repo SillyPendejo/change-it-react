@@ -278,7 +278,11 @@ function ChecklistForm() {
         </a>
         .
       </span>
-      <button className="checklist__button button" type="submit">
+      <button
+        className="checklist__button button"
+        type="submit"
+        onSubmit={handleSubmit}
+      >
         Download
       </button>
     </form>
