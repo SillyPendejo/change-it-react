@@ -5,7 +5,7 @@ import Overview from './components/Overview';
 import Slogan from './components/Slogan';
 import Faq from './components/Faq';
 import Reviews from './components/Reviews'
-import Blog from './components/Blog'
+import Blog from './components/Blog/Blog'
 import Checklist from './components/Checklist';
 import Footer from './components/Footer'
 

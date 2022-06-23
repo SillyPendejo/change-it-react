@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import BlogControls from "./BlogControls";
 import BlogForm from "./BlogForm";
 import BlogPosts from "./BlogPosts";
-import "../css/Blog.css";
-import "../css/block.css";
-import "../css/Checklist.css";
+import "../../css/Blog.css";
+import "../../css/block.css";
+import "../../css/Checklist.css";
 
 function Blog() {
   const [controls, setControls] = useState({
