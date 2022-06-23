@@ -2,7 +2,7 @@ import React from "react";
 
 function BlogControls({ controls, setControls }) {
   const handleFilter = ({ target }) => {
-    setControls(prevControls => ({
+    setControls((prevControls) => ({
       ...prevControls,
       filter: target.value,
     }));
@@ -10,7 +10,7 @@ function BlogControls({ controls, setControls }) {
 
   const handleSortButton = () => {
     if (controls.isSortAbc || controls.isSortDate) {
-      setControls(prevControls => ({
+      setControls((prevControls) => ({
         ...prevControls,
         isSortAbc: false,
         isSortDate: false,
@@ -22,18 +22,18 @@ function BlogControls({ controls, setControls }) {
   const handleAbcButton = () => {
     if (controls.isSortAbc) {
       if (controls.isReversed) {
-        setControls(prevControls => ({
+        setControls((prevControls) => ({
           ...prevControls,
           isReversed: false,
         }));
       } else {
-        setControls(prevControls => ({
+        setControls((prevControls) => ({
           ...prevControls,
           isReversed: true,
         }));
       }
     } else {
-      setControls(prevControls => ({
+      setControls((prevControls) => ({
         ...prevControls,
         isSortAbc: true,
         isSortDate: false,
@@ -45,18 +45,18 @@ function BlogControls({ controls, setControls }) {
   const handleDateButton = () => {
     if (controls.isSortDate) {
       if (controls.isReversed) {
-        setControls(prevControls => ({
+        setControls((prevControls) => ({
           ...prevControls,
           isReversed: false,
         }));
       } else {
-        setControls(prevControls => ({
+        setControls((prevControls) => ({
           ...prevControls,
           isReversed: true,
         }));
       }
     } else {
-      setControls(prevControls => ({
+      setControls((prevControls) => ({
         ...prevControls,
         isSortAbc: false,
         isSortDate: true,

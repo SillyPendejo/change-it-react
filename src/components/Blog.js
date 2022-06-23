@@ -35,51 +35,49 @@ function Blog() {
     return blogStorage;
   };
 
-  const sendToStorage = (entries) => {
-    localStorage.blog = JSON.stringify(entries);
+  const sendToStorage = (entriesForStorage) => {
+    localStorage.blog = JSON.stringify(entriesForStorage);
   };
 
-  const insertPostInEntry = (post, storageEntry) => {
+  const insertPostInEntry = (newPost, storageEntry) => {
     if (!storageEntry.isSortAbc && !storageEntry.isSortDate) {
-      storageEntry.posts.push(post);
+      storageEntry.posts.push(newPost);
     } else {
-      let indexForNewPost = storageEntry.posts.findIndex((entryPost) => {
-        let newPostValue, entryPostValue;
-        let result;
+      let indexForNewPost = storageEntry.posts.findIndex((storageEntryPost) => {
+        let newPostValue, storageEntryPostValue;
+        let comparationResult;
 
         if (storageEntry.isSortAbc) {
-          newPostValue = post.title;
-          entryPostValue = entryPost.title;
+          newPostValue = newPost.title;
+          storageEntryPostValue = storageEntryPost.title;
         } else if (storageEntry.isSortDate) {
-          newPostValue = post.date;
-          entryPostValue = entryPost.date;
+          newPostValue = newPost.date;
+          storageEntryPostValue = storageEntryPost.date;
         }
 
-        result = newPostValue < entryPostValue;
-        if (storageEntry.isReversed) result = newPostValue > entryPostValue;
-        return result;
+        comparationResult = newPostValue < storageEntryPostValue;
+        if (storageEntry.isReversed)
+          comparationResult = newPostValue > storageEntryPostValue;
+        return comparationResult;
       });
 
-      if (indexForNewPost === -1) {
-        storageEntry.posts.push(post);
+      if (indexForNewPost !== -1) {
+        storageEntry.posts.splice(indexForNewPost, 0, newPost);
       } else {
-        storageEntry.posts.splice(indexForNewPost, 0, post);
+        storageEntry.posts.push(newPost);
       }
     }
   };
 
   useEffect(() => {
     sendToStorage(getStorage());
-    console.log("aaa");
   }, []);
 
   useEffect(() => {
     if (!newPost.date) return;
-    setPosts((prevPosts) => [...prevPosts, newPost]);
-    console.log(newPost);
 
     const storage = getStorage();
-    for (const storageEntry of storage) {
+    for (let storageEntry of storage) {
       if (
         newPost.title.toUpperCase().includes(storageEntry.filter.toUpperCase())
       ) {
@@ -87,12 +85,18 @@ function Blog() {
       }
     }
     sendToStorage(storage);
+
+    return () => {
+      setNewPost({
+        title: "",
+        text: "",
+        date: null,
+      });
+    };
   }, [newPost]);
 
   const findSortedPostsInStorage = () => {
-    const storage = getStorage();
-
-    for (const storageEntry of storage) {
+    for (let storageEntry of getStorage()) {
       const isEntryFilteredAndSorted =
         storageEntry.filter.toUpperCase() === controls.filter.toUpperCase() &&
         storageEntry.isSortAbc === controls.isSortAbc &&
@@ -105,10 +109,9 @@ function Blog() {
     }
     return null;
   };
-  const findFilteredPostsInStorage = () => {
-    const storage = getStorage();
 
-    for (const storageEntry of storage) {
+  const findFilteredPostsInStorage = () => {
+    for (let storageEntry of getStorage()) {
       const isEntryOnlyFiltered =
         storageEntry.filter.toUpperCase() === controls.filter.toUpperCase();
 
@@ -124,81 +127,84 @@ function Blog() {
     if (!controls.isSortAbc && !controls.isSortDate) return posts;
     if (posts.length < 2) return posts;
 
-    const comparePosts = (first, second) => {
-      let firstValue, secondValue;
-      let result;
+    const comparePosts = (firstPost, secondPost) => {
+      let firstPostValue, secondPostValue;
+      let comparationResult;
 
       if (controls.isSortAbc) {
-        firstValue = first.title;
-        secondValue = second.title;
+        firstPostValue = firstPost.title;
+        secondPostValue = secondPost.title;
       } else if (controls.isSortDate) {
-        firstValue = first.date;
-        secondValue = second.date;
+        firstPostValue = firstPost.date;
+        secondPostValue = secondPost.date;
       }
 
-      result = firstValue > secondValue ? 1 : -1;
-      if (controls.isReversed) return result === 1 ? -1 : 1;
-      return result;
+      comparationResult = firstPostValue > secondPostValue ? 1 : -1;
+      if (controls.isReversed) return comparationResult === 1 ? -1 : 1;
+      return comparationResult;
     };
 
     return posts.sort(comparePosts);
   };
 
-  const createEntry = (posts) => ({
+  const createEntry = (postsForEntry) => ({
     isSortAbc: controls.isSortAbc,
     isSortDate: controls.isSortDate,
     isReversed: controls.isReversed,
     filter: controls.filter,
-    posts: posts,
+    posts: postsForEntry,
   });
 
   useEffect(() => {
-    let sortedPosts;
-
     const storageSortedPosts = findSortedPostsInStorage();
     if (storageSortedPosts) {
       setPosts(storageSortedPosts);
       return;
     }
 
-    const storageFilteredPosts = findSortedPostsInStorage();
+    const storageFilteredPosts = findFilteredPostsInStorage();
     if (storageFilteredPosts) {
       sortedPosts = sortPosts(storageFilteredPosts);
       setPosts(sortedPosts);
+
       const storage = getStorage();
       storage.push(createEntry(sortedPosts));
       sendToStorage(storage);
       return;
     }
-    sortedPosts = sortPosts(
+
+    const sortedPosts = sortPosts(
       posts.filter((post) =>
         post.title.toUpperCase().includes(controls.filter.toUpperCase())
       )
     );
+    setPosts(sortedPosts);
+    if (sortedPosts.length === 0) return;
+
     const storage = getStorage();
     storage.push(createEntry(sortedPosts));
-    setPosts(sortedPosts);
     sendToStorage(storage);
-  }, [controls]);
+  }, [controls, newPost]);
 
   const deletePost = (id) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.date !== id));
     const storage = getStorage();
-    for (const storageEntry of storage) {
-        for (let i = 0; i < storageEntry.posts.length; i++) {
-            if (storageEntry.posts[i].date == id) {
-              storageEntry.posts.splice(i, 1);
-              break;
-           }
+    for (let storageEntry of storage) {
+      for (let i = 0; i < storageEntry.posts.length; i++) {
+        if (storageEntry.posts[i].date === id) {
+          storageEntry.posts.splice(i, 1);
+          break;
         }
+      }
     }
+    sendToStorage(storage);
   };
 
   return (
     <div className="blog_container">
       <BlogForm setNewPost={setNewPost} />
       <BlogControls controls={controls} setControls={setControls} />
-      <BlogPosts posts={posts} deletePost={deletePost}/>
+      <BlogPosts posts={posts} deletePost={deletePost} />
     </div>
   );
 }

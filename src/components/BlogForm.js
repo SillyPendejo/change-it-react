@@ -19,7 +19,7 @@ function BlogForm({ setNewPost }) {
       text: target.value,
     }));
   };
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (formState.title === "") {
       setFormState((prevState) => ({

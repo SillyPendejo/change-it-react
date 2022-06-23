@@ -11,7 +11,10 @@ function BlogPosts({ posts, deletePost }) {
         <div className="blog__post_date">
           {new Date(post.date).toLocaleString()}
         </div>
-        <div className="blog__post_delete" onClick={() => deletePost(post.date)}></div>
+        <div
+          className="blog__post_delete"
+          onClick={() => deletePost(post.date)}
+        ></div>
       </div>
     </div>
   ));

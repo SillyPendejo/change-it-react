@@ -41,16 +41,16 @@ function ChecklistForm() {
     setFirstName(target.value);
   };
   const handleFocusFirstName = () => {
-    setErrorList(prevList => ({ ...prevList, firstName: "" }));
+    setErrorList((prevList) => ({ ...prevList, firstName: "" }));
   };
   useEffect(() => {
     if (!isValidText(firstName, /^[A-Z][a-z]+$/)) {
-      setErrorList(prevList => ({
+      setErrorList((prevList) => ({
         ...prevList,
         firstName: nameErrorText(firstName, "name"),
       }));
     } else {
-      setErrorList(prevList => ({ ...prevList, firstName: "" }));
+      setErrorList((prevList) => ({ ...prevList, firstName: "" }));
     }
   }, [firstName]);
 
@@ -59,16 +59,16 @@ function ChecklistForm() {
     setLastName(target.value);
   };
   const handleFocusLastName = () => {
-    setErrorList(prevList => ({ ...prevList, lastName: "" }));
+    setErrorList((prevList) => ({ ...prevList, lastName: "" }));
   };
   useEffect(() => {
     if (!isValidText(lastName, /^[A-Z][a-z]+$/)) {
-      setErrorList(prevList => ({
+      setErrorList((prevList) => ({
         ...prevList,
         lastName: nameErrorText(lastName, "name"),
       }));
     } else {
-      setErrorList(prevList => ({ ...prevList, lastName: "" }));
+      setErrorList((prevList) => ({ ...prevList, lastName: "" }));
     }
   }, [lastName]);
 
@@ -77,7 +77,7 @@ function ChecklistForm() {
     setEmail(target.value);
   };
   const handleFocusEmail = () => {
-    setErrorList(prevList => ({ ...prevList, email: "" }));
+    setErrorList((prevList) => ({ ...prevList, email: "" }));
   };
   useEffect(() => {
     if (
@@ -86,12 +86,12 @@ function ChecklistForm() {
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       )
     ) {
-      setErrorList(prevList => ({
+      setErrorList((prevList) => ({
         ...prevList,
         email: "Enter a valid email address",
       }));
     } else {
-      setErrorList(prevList => ({ ...prevList, email: "" }));
+      setErrorList((prevList) => ({ ...prevList, email: "" }));
     }
   }, [email]);
 
@@ -111,7 +111,7 @@ function ChecklistForm() {
     setEvent(target.value);
   };
   const handleFocusEvent = ({ target }) => {
-    setErrorList(prevList => ({
+    setErrorList((prevList) => ({
       ...prevList,
       event: "",
     }));
@@ -131,12 +131,12 @@ function ChecklistForm() {
   };
   useEffect(() => {
     if (!isValidDate(date)) {
-      setErrorList(prevList => ({
+      setErrorList((prevList) => ({
         ...prevList,
         date: "Date can't be later than today",
       }));
     } else {
-      setErrorList(prevList => ({ ...prevList, date: "" }));
+      setErrorList((prevList) => ({ ...prevList, date: "" }));
     }
   }, [date]);
 
@@ -150,7 +150,7 @@ function ChecklistForm() {
     stateList.forEach((inputState, index) => {
       if (inputState === "") {
         isInputEmpty = true;
-        setErrorList(prevList => ({
+        setErrorList((prevList) => ({
           ...prevList,
           [stateNames[index]]: "Required field",
         }));
