@@ -156,6 +156,7 @@ function Blog() {
   });
 
   useEffect(() => {
+    let sortedPosts;
     const storageSortedPosts = findSortedPostsInStorage();
     if (storageSortedPosts) {
       setPosts(storageSortedPosts);
@@ -173,7 +174,7 @@ function Blog() {
       return;
     }
 
-    const sortedPosts = sortPosts(
+    sortedPosts = sortPosts(
       posts.filter((post) =>
         post.title.toUpperCase().includes(controls.filter.toUpperCase())
       )
